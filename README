@@ -25,4 +25,37 @@ persoanei care a publicat dataset-ul.
 "HIGH" sau "LOW". Daca produsul dintre EMISSIONS si ENGINE_SIZE este mai mare
 decat produsul mediilor celor doua categorii atunci masina va avea "high
 impact", altfel "low".
-    
+    Urmatorul pas a fost analizarea datelor. Intai am calculat numarul de
+valori care lipseau initial (adaugate artificial in acest caz), numarul de date
+absurde eliminate si procentul lor. Apoi am printat statisticile relevante cu
+functia describe.
+    Pentru prezentarea distributiei am realizat o histograma pentru fiecare
+valoare numerica iar pentru cele categorice am folosite grafice countplot.
+Pentru vizualizarea valorilor outlierilor am folosit un boxplot iar pentru
+identificarea si eliminarea lor am facut cautari manuale. Graficul la categoria
+year este destul de liniar, mai multe valori pentru anii 2000, 2022 si 2011 dar
+nu cred ca va afecta negativ regresia. Graficul la categoria engine size este
+destul de concentrat in zona 2-3 dar deoarece intuiesc ca este o legatura
+stransa intre marimea motorului si cata benzina consuma cred ca nu va afecta
+negativ. Graficul cilindrilor nu cred ne spune foarte multe, cred ca este
+posibil sa nu fie o corelatie prea puternica intre numarul de cilindrii si
+consumul de combustibil. Graficul de emissions este cel mai concentrat in zona
+200-250 dar destul de liniar. Daca analizam toate graficele impreuna observam
+cat de asemanatoare sunt emissions si engine size cu fuel consumption. Personal
+intuiesc ca acelea sunt categoriile cele mai semnificative pentru aproximarea
+consumului. Mai observam si ca graficul categoriei anului si al consumului nu
+sunt foarte similare, ceea ce sugereaza ca anul nu este foarte semnificativ
+pentru consum si ca poate acea categorie ar trebui scoasa.
+    Graficul de la boxplot ne arata discrepante foarte mari intre date, ceea ce
+inseamna ca daca vrem ca regresia noastra sa fie corecta trebuie sa le
+normalizam inainte.
+    Pentru corelatie am folosit un heatmap care confirma presupunerile facute
+la graficele anterioare. Cea mai puternica corelatie cu fuel consumption o au
+emissions si engine size iar cea mai slaba corelatie o are cu year.
+    Pentru graficele de relatie am folosit scatterplots. Graficul coloanei year
+nu prezinta niciun model clar si transmite faptul ca, consumul de combustibil
+nu are o corelatie prea puternica cu anul masinii. La graficul functiei engine
+size observam clar ca cu cat se mareste marimea motorului se mareste si
+consumul. Si la graficul cilindrilor observam acelasi lucru. La graficul
+emisiilor aceasta legatura este cea mai clara deoarece graficul are aproape cel
+mai mare unghi fata de axa Ox.
