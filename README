@@ -1,0 +1,28 @@
+Streche Andrei-Claudiu, 312CA
+
+    Proiect PCLP3
+
+    Acest proiect rezolva o problema de regresie care prelucreaza un set de
+date consum combustil. Setul este ales de pe site-ul kaggle:
+https://www.kaggle.com/datasets/ahmettyilmazz/fuel-consumption. Setul initial
+are 13 coloane si 22556 randuri.
+    
+    Preprocesarea datelor
+
+    Intai am ales sa scot 3 dintre coloane pentru a le pastra doar pe cele mai
+importante in determinarea consumului de combustibil. Am ales eliminarea
+coloanelor comb(l/100km), comb(mpg) si highway fuel consumption deoarece erau
+deja similare cu categoria fuel consumption. 
+    Urmatorul pas ar fi sa caut datele lipsa si sa le repar dar nu am reusit sa
+gasesc un dataset pe kaggle cu date lipsa asa ca m-am gandi ca e mai simplu sa
+le scot eu intentionat, cu scop educativ, si sa le repar la loc.
+    Urmatorul pas a fost detectarea datelor aberante. Pentru cele numerice am
+verificat sa fie intr-un interval care are sens (de exemplu 2-12 la nr de
+cilindrii). Pentru coloana fuel am eliminat liniile care nu aveau valoarea "X,
+Z, D, E, N" deoarece acelea erau singurele optiuni posibile valide conform
+persoanei care a publicat dataset-ul.
+    Apoi am adaugat o coloana noua, "impact", care poate avea doua valori,
+"HIGH" sau "LOW". Daca produsul dintre EMISSIONS si ENGINE_SIZE este mai mare
+decat produsul mediilor celor doua categorii atunci masina va avea "high
+impact", altfel "low".
+    
