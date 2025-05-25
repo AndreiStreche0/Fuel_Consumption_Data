@@ -9,10 +9,11 @@ are 13 coloane si 22556 randuri.
     
     Preprocesarea datelor
 
-    Intai am ales sa scot 3 dintre coloane pentru a le pastra doar pe cele mai
+    Intai am ales sa scot 4 dintre coloane pentru a le pastra doar pe cele mai
 importante in determinarea consumului de combustibil. Am ales eliminarea
 coloanelor comb(l/100km), comb(mpg) si highway fuel consumption deoarece erau
-deja similare cu categoria fuel consumption. 
+deja similare cu categoria fuel consumption. Am eliminat si coloana make
+deoarece nu parea sa aiba o legatura prea stransa cu cosumul de combustibil.
     Urmatorul pas ar fi sa caut datele lipsa si sa le repar dar nu am reusit sa
 gasesc un dataset pe kaggle cu date lipsa asa ca m-am gandi ca e mai simplu sa
 le scot eu intentionat, cu scop educativ, si sa le repar la loc.
@@ -59,3 +60,19 @@ size observam clar ca cu cat se mareste marimea motorului se mareste si
 consumul. Si la graficul cilindrilor observam acelasi lucru. La graficul
 emisiilor aceasta legatura este cea mai clara deoarece graficul are aproape cel
 mai mare unghi fata de axa Ox.
+    Pentru antrenarea modelului intai trebuia sa procesam coloanele care aveau
+string-uri. Intai am folosit one hot encoding pentru coloanele fuel si impact
+deoarece erau categorice. Coloana transmission este de forma "stringnumber".
+Unde numarul este numarul de angrenaje iar string-ul determina daca este masina
+manuala sau automata. Pentru simplitate am ales sa scot numarul folosind
+functia extract din pandas iar asa coloana transmission a devenit categorica si
+i-am aplicat one hot encoding. La coloana vehicle_class am observat ca sunt
+cateva clase care apar foarte des dar si un numar mare de clase unice. Pentru a
+aplica one hot encoding am ales sa pun o clasa de other la cele care apar mai
+putin. Pentru coloana MODEL erau foarte multe variante unice asa ca m-am gandit
+ca cea mai buna metoda este sa inlocuiesc fiecare valoare cu frecventa ei. Sunt
+cateva valori mai mari decat restul dar prin standardizare cred ca nu o sa
+afecteze negativ antrenarea.
+    Ultimul pas pentru pregatirea datelor pentru regresie este standarizarea
+lor. Am folosit StandardScaler si am standardizat doar coloanele care nu erau
+one hot encoded.

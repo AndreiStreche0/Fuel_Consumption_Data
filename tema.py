@@ -2,11 +2,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 
 def drop_columns(df):
     df = df.drop("HWY (L/100 km)", axis='columns')
     df = df.drop("COMB (L/100 km)", axis='columns')
     df = df.drop("COMB (mpg)", axis='columns')
+    df = df.drop("MAKE", axis='columns')
     return df
 
 def repair_data(df):
@@ -78,6 +80,38 @@ def print_scatter_plots(df):
         plt.figure(figsize=(8, 4))
         sns.scatterplot(data=df, x = column, y = 'FUEL CONSUMPTION')
         plt.show()
+def string_into_integers(df):
+    #processing transmission column for one hot encoding
+    df['TRANSMISSION'] = df['TRANSMISSION'].str.extract(r'([A-Z]+)')
+
+    #processing vehicle class column for one hot encoding
+    freq = df['VEHICLE CLASS'].value_counts()
+    saved_values = freq[freq >= 1000].index
+    df['VEHICLE CLASS'] = df['VEHICLE CLASS'].where(df['VEHICLE CLASS'].isin(saved_values), 'OTHER')
+
+    #one hot encoding
+    df = pd.get_dummies(df, columns=['FUEL', 'IMPACT', 'TRANSMISSION', 'VEHICLE CLASS'], drop_first=True)
+
+    encoder = LabelEncoder()
+    df['IMPACT_LOW'] = encoder.fit_transform(df['IMPACT_LOW'])
+    df['FUEL_E'] = encoder.fit_transform(df['FUEL_E'])
+    df['FUEL_N'] = encoder.fit_transform(df['FUEL_N'])
+    df['FUEL_X'] = encoder.fit_transform(df['FUEL_X'])
+    df['FUEL_Z'] = encoder.fit_transform(df['FUEL_Z'])
+    df['TRANSMISSION_AM'] = encoder.fit_transform(df['TRANSMISSION_AM'])
+    df['TRANSMISSION_AS'] = encoder.fit_transform(df['TRANSMISSION_AS'])
+    df['TRANSMISSION_AV'] = encoder.fit_transform(df['TRANSMISSION_AV'])
+    df['TRANSMISSION_M'] = encoder.fit_transform(df['TRANSMISSION_M'])
+    df['VEHICLE CLASS_FULL-SIZE'] = encoder.fit_transform(df['VEHICLE CLASS_FULL-SIZE'])
+    df['VEHICLE CLASS_MID-SIZE'] = encoder.fit_transform(df['VEHICLE CLASS_MID-SIZE'])
+    df['VEHICLE CLASS_OTHER'] = encoder.fit_transform(df['VEHICLE CLASS_OTHER'])
+    df['VEHICLE CLASS_PICKUP TRUCK - STANDARD'] = encoder.fit_transform(df['VEHICLE CLASS_PICKUP TRUCK - STANDARD'])
+    df['VEHICLE CLASS_SUBCOMPACT'] = encoder.fit_transform(df['VEHICLE CLASS_SUBCOMPACT'])
+    df['VEHICLE CLASS_SUV'] = encoder.fit_transform(df['VEHICLE CLASS_SUV'])
+
+    #changing the values in MODEL column with their frequency
+    df['MODEL'] = df['MODEL'].map(df['MODEL'].value_counts())
+    return df
 
 df = pd.read_csv('initial_data.csv')
 
@@ -102,3 +136,14 @@ print_distribution(df)
 visualising_outliers(df)
 print_corelation_m(df)
 print_scatter_plots(df)
+
+df = string_into_integers(df)
+
+#data standardization
+scaler = StandardScaler()
+columns = ['YEAR', 'MODEL', 'ENGINE SIZE', 'CYLINDERS', 'EMISSIONS']
+df[columns] = scaler.fit_transform(df[columns])
+
+df.to_csv('result.csv')
+
+print(df.head(20))
