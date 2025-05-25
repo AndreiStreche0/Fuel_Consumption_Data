@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, r2_score
 
 def drop_columns(df):
     df = df.drop("HWY (L/100 km)", axis='columns')
@@ -144,6 +147,39 @@ scaler = StandardScaler()
 columns = ['YEAR', 'MODEL', 'ENGINE SIZE', 'CYLINDERS', 'EMISSIONS']
 df[columns] = scaler.fit_transform(df[columns])
 
-df.to_csv('result.csv')
+#droping target column
+X = df.drop('FUEL CONSUMPTION', axis='columns')
+y = df['FUEL CONSUMPTION']
 
-print(df.head(20))
+#spliting data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+X_train.to_csv('training_data.csv')
+X_test.to_csv('testing_data.csv')
+
+#training
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+#the prediction
+prediction = model.predict(X_test)
+
+#evaluating our result
+mae = mean_absolute_error(y_test, prediction)
+r2 = r2_score(y_test, prediction)
+
+print(f"Evaluation: MAE - {mae:.4f}, R^2 - {r2:.4f}")
+
+#prediction visualization
+plt.figure(figsize=(8, 4))
+sns.scatterplot(x=y_test, y=prediction, color='red')
+#creating the regression line
+min_val = min(y_test.min(), prediction.min())
+max_val = max(y_test.max(), prediction.max())
+plt.plot([min_val, max_val], [min_val, max_val])
+
+plt.xlabel('FUEL CONSUMPTION VALUES')
+plt.ylabel('PREDICTIONS')
+plt.show()

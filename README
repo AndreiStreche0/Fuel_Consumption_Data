@@ -76,3 +76,18 @@ afecteze negativ antrenarea.
     Ultimul pas pentru pregatirea datelor pentru regresie este standarizarea
 lor. Am folosit StandardScaler si am standardizat doar coloanele care nu erau
 one hot encoded.
+    Apoi am scos tinta din dataset (fuel consumption) si am impartit datele
+in testare si antrenare cu 20%, respectiv 80%. Le am salvat in fisiere csv
+diferite ("training_data.csv" si "testing_data.csv").
+    Pentru antrenare am ales LinearRegression iar apoi am calculat predictia.
+Pentru interpreatarea rezultatelor am ales MAE si R^2. Rezultatul este:
+"Evaluation: MAE - 0.3272, R^2 - 0.9720". De la folosirea describe am observat
+ca in medie o masina consuma 12.7 litrii de combustibil. Cum marja de eroare
+este de 0.3 inseamna ca marja de eroare este aproximativ 2.3%. Rezultatul
+perfect la R^2 este 1 deci consider ca 0.972 este foarte bine si aproximarea
+a fost foarte apropiata.
+    Pentru performanta modelului am ales sa folosesc un grafic care contine
+datele de consum de combustibil si predictiile modelului iar care are in mijloc
+o linie de 45 de grade care determina cazul ideal (predicitie = realitate). Din
+poza se observa ca datele sunt aproape de linia originala deci antrenarea a
+fost eficienta.
